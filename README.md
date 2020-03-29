@@ -1,7 +1,7 @@
 # REST API Kalyan
 
 ## Installation
-Server with php 7.2
+Server with php 7.2.5 + sqlite
 
 cd /var/www/html
 
