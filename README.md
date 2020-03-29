@@ -31,6 +31,10 @@ php artisan migrate
 
 sudo chown -R www-data:www-data storage
 
+## Run tests
+Terminal /var/www/html/kalyan/ ./vendor/bin/phpunit
+
+
 ## kalyannayas
 GET /api/kalyannayas - list kalyannayas
 
