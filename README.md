@@ -1,5 +1,36 @@
 # REST API Kalyan
 
+## Installation
+Server with php 7.2
+
+cd /var/www/html
+
+mkdir kalyan
+
+sudo chmod -R 777 /var/www/html/kalyan
+
+cd kalyan
+
+git init
+
+git remote add origin https://github.com/sbuyny/kalyan
+
+git pull origin master
+
+composer install
+
+composer update
+
+cp .env.example .env
+
+sudo nano .env(DB_CONNECTION=sqlite , DB_DATABASE=/var/www/html/kalyan/database/database.sqlite)
+
+touch /var/www/html/kalyan/database/database.sqlite
+
+php artisan migrate
+
+sudo chown -R www-data:www-data storage
+
 ## kalyannayas
 GET /api/kalyannayas - list kalyannayas
 
