@@ -15,8 +15,13 @@ class KalyannayaTest extends TestCase
     */ 
     public function testKalyannayaCreate()
     {
-        $response = $this->json('POST', '/api/kalyannayas', ['name' => uniqid()]);
+        $name = uniqid();
+        
+        $response = $this->json('POST', '/api/kalyannayas', ['name' => $name]);
         $response->assertStatus(200);
+        
+        $response = $this->json('POST', '/api/kalyannayas', ['name' => $name]);
+        $response->assertStatus(404);
     }
     
     /**
