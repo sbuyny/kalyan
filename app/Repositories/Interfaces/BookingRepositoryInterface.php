@@ -6,48 +6,48 @@ interface BookingRepositoryInterface
     /**
      * Return list of Kalyannayas
      * 
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function all();
+    public function all(): object;
     
     /**
      * Return Kalyannaya by id
      * 
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function find($id);
+    public function find(int $id): ?object;
     
     /**
      * Create Kalyannaya by id
      *
      * @param  array  $input
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function create($input);
+    public function create(array $input): object;
     
     /**
      * Return Kalyans by Kalyannaya id
      * 
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function findByKalyannayaId($id);
+    public function findByKalyannayaId(int $id): object;
     
     /**
      * Return list of users made bookings
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function findUsers();
+    public function findUsers(): object;
     
     /**
      * Return kalyans not available for booking for all kalyannayas by data
      *
      * @param  array  $input
-     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
+     * @return array
      */
-    public function kalyansNotAvailableSearch($input);
+    public function kalyansNotAvailableSearch(array $input): array;
         
     /**
      * Return kalyans available for booking for all kalyannayas
@@ -55,7 +55,7 @@ interface BookingRepositoryInterface
      * @param  array  $input
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function kalyansAvailableSearch($input);
+    public function kalyansAvailableSearch(array $input): object;
     
     /**
      * Return kalyans available for booking for current kalyannaya
@@ -63,5 +63,5 @@ interface BookingRepositoryInterface
      * @param  array  $input
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function kalyansAvailableData($input);
+    public function kalyansAvailableData(array $input): object;
 }

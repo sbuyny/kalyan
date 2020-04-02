@@ -7,19 +7,13 @@ use Illuminate\Support\Facades\DB;
 
 class KalyanRepository implements KalyanRepositoryInterface
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    const TABLE = 'kalyans';
 
     /**
      * Return Kalyans
      * 
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function all()
+    public function all(): object
     {
         return Kalyan::all();
     }
@@ -28,9 +22,9 @@ class KalyanRepository implements KalyanRepositoryInterface
      * Return Kalyannaya by id
      * 
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function find($id)
+    public function find(int $id): ?object
     {
         return Kalyan::find($id);
     }
@@ -39,9 +33,9 @@ class KalyanRepository implements KalyanRepositoryInterface
      * Return Kalyans by Kalyannaya id
      * 
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function findByKalyannayaId($id)
+    public function findByKalyannayaId(int $id): object
     {
         return Kalyan::where('kalyannaya_id', $id)->orderBy('name')->get();
     }
@@ -50,9 +44,9 @@ class KalyanRepository implements KalyanRepositoryInterface
      * Create Kalyannaya by id
      *
      * @param  array  $input
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function create($input)
+    public function create(array $input): object
     {
         return Kalyan::create($input);
     }
@@ -63,10 +57,9 @@ class KalyanRepository implements KalyanRepositoryInterface
      * @param  string  $name
      * @return int
      */
-    public function findByNameCount($name)
+    public function findByNameCount(string $name): int
     {
-        $exists = DB::table(self::TABLE)
-            ->select('id')
+        $exists = Kalyan::select('id')
             ->where('name', '=', $name)
             ->get()
             ->count();
@@ -81,10 +74,9 @@ class KalyanRepository implements KalyanRepositoryInterface
      * @param  string  $name
      * @return int
      */
-    public function findByNameCountWithoutSelf($id, $name)
+    public function findByNameCountWithoutSelf(int $id, string $name): int
     {
-        $exists = DB::table(self::TABLE)
-            ->select('id')
+        $exists = Kalyan::select('id')
             ->where([
                 ['name', '=', $name],
                 ['id', '!=', $id],

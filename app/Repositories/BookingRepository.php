@@ -7,19 +7,13 @@ use Illuminate\Support\Facades\DB;
 
 class BookingRepository implements BookingRepositoryInterface
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    const TABLE = 'bookings';
 
     /**
      * Return Kalyans
      * 
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function all()
+    public function all(): object
     {
         return Booking::all();
     }
@@ -28,9 +22,9 @@ class BookingRepository implements BookingRepositoryInterface
      * Return Kalyannaya by id
      * 
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function find($id)
+    public function find(int $id): ?object
     {
         return Booking::find($id);
     }
@@ -39,9 +33,9 @@ class BookingRepository implements BookingRepositoryInterface
      * Return Kalyans by Kalyannaya id
      * 
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function findByKalyannayaId($id)
+    public function findByKalyannayaId(int $id): object
     {
         return Booking::where('kalyannaya_id', $id)->orderBy('name')->get();
     }
@@ -50,9 +44,9 @@ class BookingRepository implements BookingRepositoryInterface
      * Create Kalyannaya by id
      *
      * @param  array  $input
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function create($input)
+    public function create(array $input): object
     {
         return Booking::create($input);
     }
@@ -62,10 +56,9 @@ class BookingRepository implements BookingRepositoryInterface
      *
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function findUsers()
+    public function findUsers(): object
     {
-        $users = DB::table(self::TABLE)
-            ->select('name')
+        $users = Booking::select('name')
             ->groupBy('name')
             ->orderBy('name')
             ->get();
@@ -76,12 +69,12 @@ class BookingRepository implements BookingRepositoryInterface
     /**
      * Return kalyans not available for booking for all kalyannayas by data
      *
-     * @param  array  $input
-     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
+     * @param  array $input
+     * @return array
      */
-    public function kalyansNotAvailableSearch($input)
+    public function kalyansNotAvailableSearch(array $input): array
     {
-        $kalyansNotAvailable = array();
+        $kalyansNotAvailable = [];
 
         $kalyansNotAvailableSearch = DB::table('booking_kalyans')
             ->leftJoin('bookings', 'bookings.id', '=', 'booking_kalyans.booking_id')
@@ -105,7 +98,7 @@ class BookingRepository implements BookingRepositoryInterface
      * @param  array  $input
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function kalyansAvailableSearch($input)
+    public function kalyansAvailableSearch(array $input): object
     {
         $kalyansNotAvailable = self::kalyansNotAvailableSearch($input);
 
@@ -125,7 +118,7 @@ class BookingRepository implements BookingRepositoryInterface
      * @param  array  $input
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function kalyansAvailableData($input)
+    public function kalyansAvailableData(array $input): object
     {
         $kalyansNotAvailable = self::kalyansNotAvailableSearch($input);
 

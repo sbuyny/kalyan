@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController as BaseController;
 use App\Repositories\Interfaces\BookingRepositoryInterface;
-use App\Booking;
 use App\BookingKalyan;
 use App\Kalyannaya;
 use Validator;
@@ -24,6 +23,8 @@ class BookingController extends BaseController
     
     /**
      * Class constructor.
+     * 
+     * @param  \App\Repositories\Interfaces\BookingRepositoryInterface $bookingRepository
      */
     public function __construct(BookingRepositoryInterface $bookingRepository)
     {
@@ -35,7 +36,7 @@ class BookingController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): object
     {
         $booking = $this->bookingRepository->all();
 
@@ -45,9 +46,10 @@ class BookingController extends BaseController
     /**
      * Display a listing of Bookings for kalyannaya id.
      * 
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function kalyannaya($id)
+    public function kalyannaya(int $id): object
     {
 
         $booking = $this->bookingRepository->findByKalyannayaId($id);
@@ -61,7 +63,7 @@ class BookingController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): object
     {
         $input = $request->all();
 
@@ -87,6 +89,7 @@ class BookingController extends BaseController
             return $this->sendError('Kalyannaya with that id not found.');
         }
 
+        //calculate booking finish time for create booking
         $to = strtotime($input['from']) + self::BRON_MINUTES * 60;
 
         $input['to'] = date("Y-m-d H:i:s", $to);
@@ -134,7 +137,7 @@ class BookingController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id): object
     {
         $booking = $this->bookingRepository->find($id);
 
@@ -150,7 +153,7 @@ class BookingController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function users()
+    public function users(): object
     {
         $users = $this->bookingRepository->findUsers();
 
@@ -163,7 +166,7 @@ class BookingController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function search(Request $request)
+    public function search(Request $request): object
     {
         $input = $request->all();
 

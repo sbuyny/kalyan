@@ -7,19 +7,13 @@ use Illuminate\Support\Facades\DB;
 
 class KalyannayaRepository implements KalyannayaRepositoryInterface
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    const TABLE = 'kalyannayas';
 
     /**
      * Return Kalyannayas
      * 
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function all()
+    public function all(): object
     {
         return Kalyannaya::all();
     }
@@ -28,9 +22,9 @@ class KalyannayaRepository implements KalyannayaRepositoryInterface
      * Return Kalyannaya by id
      * 
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function find($id)
+    public function find(int $id): ?object
     {
         return Kalyannaya::find($id);
     }
@@ -39,9 +33,9 @@ class KalyannayaRepository implements KalyannayaRepositoryInterface
      * Create Kalyannaya by id
      *
      * @param  array  $input
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function create($input)
+    public function create(array $input): object
     {
         return Kalyannaya::create($input);
     }
@@ -52,10 +46,9 @@ class KalyannayaRepository implements KalyannayaRepositoryInterface
      * @param  string  $name
      * @return int
      */
-    public function findByNameCount($name)
+    public function findByNameCount(string $name): int
     {
-        $exists = DB::table(self::TABLE)
-            ->select('id')
+        $exists = Kalyannaya::select('id')
             ->where('name', '=', $name)
             ->get()
             ->count();
@@ -70,10 +63,9 @@ class KalyannayaRepository implements KalyannayaRepositoryInterface
      * @param  string  $name
      * @return int
      */
-    public function findByNameCountWithoutSelf($id, $name)
+    public function findByNameCountWithoutSelf(int $id, string $name): int
     {
-        $exists = DB::table(self::TABLE)
-            ->select('id')
+        $exists = Kalyannaya::select('id')
             ->where([
                 ['name', '=', $name],
                 ['id', '!=', $id],

@@ -18,6 +18,8 @@ class KalyannayaController extends BaseController
     
     /**
      * Class constructor.
+     * 
+     * @param  App\Repositories\Interfaces\KalyannayaRepositoryInterface $kalyannayaRepository
      */
     public function __construct(KalyannayaRepositoryInterface $kalyannayaRepository)
     {
@@ -29,7 +31,7 @@ class KalyannayaController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): object
     {
         $kalyannayas = $this->kalyannayaRepository->all();
 
@@ -42,7 +44,7 @@ class KalyannayaController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): object
     {
         $input = $request->all();
 
@@ -71,7 +73,7 @@ class KalyannayaController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id): object
     {
         $kalyannaya = $this->kalyannayaRepository->find($id);
 
@@ -86,10 +88,10 @@ class KalyannayaController extends BaseController
      * Update the specified Kalyannaya in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Kalyannaya\Kalyannaya $kalyannaya
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Kalyannaya $kalyannaya)
+    public function update(Request $request, Kalyannaya $kalyannaya): object
     {
         $input = $request->all();
 
@@ -116,10 +118,10 @@ class KalyannayaController extends BaseController
     /**
      * Remove the specified Kalyannaya from storage.
      *
-     * @param  int  $id
+     * @param  \App\Kalyannaya\Kalyannaya $kalyannaya
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Kalyannaya $kalyannaya)
+    public function destroy(Kalyannaya $kalyannaya): object
     {
         $kalyannaya->delete();
 

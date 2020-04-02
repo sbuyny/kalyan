@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController as BaseController;
 use App\Repositories\Interfaces\KalyanRepositoryInterface;
 use App\Kalyan;
+use App\Kalyannaya;
 use Validator;
 
 class KalyanController extends BaseController
@@ -18,6 +19,8 @@ class KalyanController extends BaseController
     
     /**
      * Class constructor.
+     * 
+     * @param  App\Repositories\Interfaces\KalyanRepositoryInterface $kalyanRepository
      */
     public function __construct(KalyanRepositoryInterface $kalyanRepository)
     {
@@ -29,7 +32,7 @@ class KalyanController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): object
     {
         $kalyan = $this->kalyanRepository->all();
 
@@ -39,9 +42,10 @@ class KalyanController extends BaseController
     /**
      * Display a listing of Kalyan for kalyannaya id.
      * 
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function kalyannaya($id)
+    public function kalyannaya(int $id): object
     {
         $kalyan = $this->kalyanRepository->findByKalyannayaId($id);
 
@@ -54,7 +58,7 @@ class KalyanController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): object
     {
         $input = $request->all();
 
@@ -73,6 +77,12 @@ class KalyanController extends BaseController
         if ($sameName > 0) {
             return $this->sendError('Kalyan with that name already exists.');
         }
+        
+        //check if kalyannaya exists
+        $kalyannaya = Kalyannaya::find($input['kalyannaya_id']);
+        if (!isset($kalyannaya->id)) {
+            return $this->sendError('Kalyannaya with that id not found.');
+        }
 
         $kalyan = $this->kalyanRepository->create($input);
 
@@ -85,7 +95,7 @@ class KalyanController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id): object
     {
         $kalyan = $this->kalyanRepository->find($id);
 
@@ -100,10 +110,10 @@ class KalyanController extends BaseController
      * Update the specified Kalyan in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\KalyanKalyan $kalyan
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Kalyan $kalyan)
+    public function update(Request $request, Kalyan $kalyan): object
     {
         $input = $request->all();
 
@@ -134,10 +144,10 @@ class KalyanController extends BaseController
     /**
      * Remove the specified Kalyan from storage.
      *
-     * @param  int  $id
+     * @param  \App\KalyanKalyan $kalyan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Kalyan $kalyan)
+    public function destroy(Kalyan $kalyan): object
     {
         $kalyan->delete();
 
