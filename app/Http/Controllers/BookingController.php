@@ -4,15 +4,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController as BaseController;
 use App\Repositories\Interfaces\BookingRepositoryInterface;
-use App\BookingKalyan;
 use App\Kalyannaya;
+use App\Booking;
 use Validator;
 
 class BookingController extends BaseController
 {
-
-    const BRON_MINUTES = 30;
-    const TRUBKA_PERSONS = 2;
     
     /**
      * The connection name for the model.
@@ -89,43 +86,11 @@ class BookingController extends BaseController
             return $this->sendError('Kalyannaya with that id not found.');
         }
 
-        //calculate booking finish time for create booking
-        $to = strtotime($input['from']) + self::BRON_MINUTES * 60;
-
-        $input['to'] = date("Y-m-d H:i:s", $to);
-
-        //search for available kalyans for selected time in all kalyannayas
-        $kalyansAvailableData = $this->bookingRepository->kalyansAvailableData($input);
-
-        $trubokAvailable = 0;
-
-        foreach ($kalyansAvailableData as $k => $v) {
-            $trubokAvailable += $v->trubok;
-        }
-
-        if ($trubokAvailable < $input['people'] / self::TRUBKA_PERSONS) {
-            return $this->sendError('We don\'t have enough tubes in that time in that kalyannaya for those peoples.');
-        }
-
         //create booking
         $booking = $this->bookingRepository->create($input);
 
-        $bk['booking_id'] = $booking['id'];
-
-        $enough = 0;
-        $trubokAdded = 0;
-
-        //add kayans to booking
-        foreach ($kalyansAvailableData as $k => $v) {
-            //reserve kalyan until enough
-            if ($enough == 0) {
-                $bk['kalyan_id'] = $v->id;
-                $booking_kalyan = BookingKalyan::create($bk);
-                $trubokAdded += $v->trubok;
-                if ($trubokAdded >= $input['people'] / self::TRUBKA_PERSONS) {
-                    $enough = 1;
-                }
-            }
+        if (!($booking instanceof Booking)) {
+            return $this->sendError('We don\'t have enough tubes in that time in that kalyannaya for those peoples.');
         }
 
         return $this->sendResponse($booking->toArray(), 'Booking created successfully.');

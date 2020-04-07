@@ -2,11 +2,15 @@
 namespace App\Repositories;
 
 use App\Booking;
+use App\BookingKalyan;
 use App\Repositories\Interfaces\BookingRepositoryInterface;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\BaseController;
 
 class BookingRepository implements BookingRepositoryInterface
 {
+    const BRON_MINUTES = 30;
+    const TRUBKA_PERSONS = 2;
 
     /**
      * Return Kalyans
@@ -48,7 +52,48 @@ class BookingRepository implements BookingRepositoryInterface
      */
     public function create(array $input): object
     {
-        return Booking::create($input);
+        //calculate booking finish time for create booking
+        $to = strtotime($input['from']) + self::BRON_MINUTES * 60;
+
+        $input['to'] = date("Y-m-d H:i:s", $to);
+
+        //search for available kalyans for selected time in all kalyannayas
+        $kalyansAvailableData = self::kalyansAvailableData($input);
+        
+        $trubokAvailable = 0;
+
+        foreach ($kalyansAvailableData as $k => $v) {
+            $trubokAvailable += $v->trubok;
+        }
+
+        if ($trubokAvailable < $input['people'] / self::TRUBKA_PERSONS) {
+            $response = [
+            'success' => false,
+            'message' => 'We don\'t have enough tubes in that time in that kalyannaya for those peoples.',
+            ];
+            return response()->json($response, 200);
+        }
+        
+        $booking = Booking::create($input);
+        
+        $bk['booking_id'] = $booking['id'];
+
+        $enough = 0;
+        $trubokAdded = 0;
+
+        //add kayans to booking
+        foreach ($kalyansAvailableData as $k => $v) {
+            //reserve kalyan until enough
+            if ($enough == 0) {
+                $bk['kalyan_id'] = $v->id;
+                $booking_kalyan = BookingKalyan::create($bk);
+                $trubokAdded += $v->trubok;
+                if ($trubokAdded >= $input['people'] / self::TRUBKA_PERSONS) {
+                    $enough = 1;
+                }
+            }
+        }
+        return $booking;
     }
     
     /**

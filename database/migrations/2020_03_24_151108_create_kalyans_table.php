@@ -17,7 +17,7 @@ class CreateKalyansTable extends Migration
             $table->id();
             $table->string('name');
             $table->integer('trubok');
-            $table->integer('kalyannaya_id');
+            $table->integer('kalyannaya_id')->unsigned();
             $table->foreign('kalyannaya_id')->references('id')->on('kalyannayas')->onDelete('cascade');
             $table->timestamps();
         });
