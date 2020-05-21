@@ -28,9 +28,9 @@ class BookingRepository implements BookingRepositoryInterface
      * @param  int  $id
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function find(int $id): ?object
+    public function findOrFail(int $id): ?object
     {
-        return Booking::find($id);
+        return Booking::findOrFail($id);
     }
     
     /**

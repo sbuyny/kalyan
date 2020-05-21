@@ -81,10 +81,7 @@ class BookingController extends BaseController
         }
 
         //check if kalyannaya exists
-        $kalyannaya = Kalyannaya::find($input['kalyannaya_id']);
-        if (!isset($kalyannaya->id)) {
-            return $this->sendError('Kalyannaya with that id not found.');
-        }
+        $kalyannaya = Kalyannaya::findOrFail($input['kalyannaya_id']);
 
         //create booking
         $booking = $this->bookingRepository->create($input);
@@ -104,11 +101,7 @@ class BookingController extends BaseController
      */
     public function show(int $id): object
     {
-        $booking = $this->bookingRepository->find($id);
-
-        if (is_null($booking)) {
-            return $this->sendError('Booking not found.');
-        }
+        $booking = $this->bookingRepository->findOrFail($id);
 
         return $this->sendResponse($booking->toArray(), 'Booking retrieved successfully.');
     }

@@ -75,11 +75,7 @@ class KalyannayaController extends BaseController
      */
     public function show(int $id): object
     {
-        $kalyannaya = $this->kalyannayaRepository->find($id);
-
-        if (is_null($kalyannaya)) {
-            return $this->sendError('Kalyannaya not found.');
-        }
+        $kalyannaya = $this->kalyannayaRepository->findOrFail($id);
 
         return $this->sendResponse($kalyannaya->toArray(), 'Kalyannaya retrieved successfully.');
     }

@@ -24,9 +24,9 @@ class KalyannayaRepository implements KalyannayaRepositoryInterface
      * @param  int  $id
      * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|static[]|static|null
      */
-    public function find(int $id): ?object
+    public function findOrFail(int $id): ?object
     {
-        return Kalyannaya::find($id);
+        return Kalyannaya::findOrFail($id);
     }
     
     /**

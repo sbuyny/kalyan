@@ -79,10 +79,7 @@ class KalyanController extends BaseController
         }
         
         //check if kalyannaya exists
-        $kalyannaya = Kalyannaya::find($input['kalyannaya_id']);
-        if (!isset($kalyannaya->id)) {
-            return $this->sendError('Kalyannaya with that id not found.');
-        }
+        $kalyannaya = Kalyannaya::findOrFail($input['kalyannaya_id']);
 
         $kalyan = $this->kalyanRepository->create($input);
 
@@ -97,11 +94,7 @@ class KalyanController extends BaseController
      */
     public function show(int $id): object
     {
-        $kalyan = $this->kalyanRepository->find($id);
-
-        if (is_null($kalyan)) {
-            return $this->sendError('Kalyan not found.');
-        }
+        $kalyan = $this->kalyanRepository->findOrFail($id);
 
         return $this->sendResponse($kalyan->toArray(), 'Kalyana retrieved successfully.');
     }
